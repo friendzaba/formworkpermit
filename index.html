@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autoliv WorkPermit Pro — Supplier Pre-Fill Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Prompt', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+    .topbar {
+      background: linear-gradient(135deg, #001f4d 0%, #002d72 100%);
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0, 45, 114, 0.2);
+    }
+    .topbar h1 { margin: 0; font-size: 18px; font-weight: 700; }
+    .topbar p { margin: 2px 0 0; font-size: 12px; color: #cbd5e1; }
+    .lang-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .container { max-width: 1080px; margin: 24px auto; padding: 0 16px 48px; }
+    .notice {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .card-title-wrap { display: flex; align-items: center; gap: 10px; }
+    .badge-num {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .card-title { font-size: 15px; font-weight: 700; color: #0f172a; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+    label.field-label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px; }
+    .req { color: #dc2626; margin-left: 3px; font-weight: 700; }
+    input[type="text"], input[type="email"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-family: inherit;
+      font-size: 13px;
+      color: #0f172a;
+      background: #fff;
+    }
+    .err-input { border-color: #dc2626 !important; background: #fff5f5 !important; }
+    .err-msg { color: #dc2626; font-size: 11px; margin-top: 3px; display: none; }
+    .check-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .check-card input { width: 16px; height: 16px; accent-color: #002d72; cursor: pointer; flex-shrink: 0; }
+    .type-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+    .type-tab {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background: #fff;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+    }
+    .type-tab.active {
+      border-color: #002d72;
+      background: #eff6ff;
+      box-shadow: 0 0 0 2px rgba(0, 45, 114, 0.14);
+    }
+    .attach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-top: 12px; }
+    .attach-box {
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #f8fafc;
+    }
+    .attach-box.err-input { border-style: solid !important; }
+    .attach-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .attach-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid #94a3b8;
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .file-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .file-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      font-size: 11px;
+      max-width: 240px;
+    }
+    .file-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-chip button { border: none; background: none; color: #dc2626; font-weight: 700; cursor: pointer; padding: 0; }
+    .footer-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    .btn-primary {
+      background: #002d72; color: #fff; border: none; padding: 12px 26px; border-radius: 10px;
+      font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .btn-secondary {
+      background: #fff; color: #334155; border: 1px solid #cbd5e1; padding: 12px 20px; border-radius: 10px;
+      font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div>
+      <h1>Autoliv WorkPermit Pro — Supplier Pre-Fill Form</h1>
+      <p data-th="แบบฟอร์มกรอกข้อมูลล่วงหน้าสำหรับผู้รับเหมา (ส่งไฟล์ .json พร้อมเอกสารแนบให้ผู้ควบคุมงาน Autoliv)" data-en="Contractor Pre-Fill Portal (Export .json with attachments for Autoliv Supervisor)">แบบฟอร์มกรอกข้อมูลล่วงหน้าสำหรับผู้รับเหมา (ส่งไฟล์ .json พร้อมเอกสารแนบให้ผู้ควบคุมงาน Autoliv)</p>
+    </div>
+    <button type="button" class="lang-btn" onclick="toggleLang()">EN / ไทย</button>
+  </div>
+
+  <div class="container">
+    <div class="notice">
+      <b data-th="วิธีใช้งาน:" data-en="How to use:">วิธีใช้งาน:</b>
+      <span data-th='กรอกข้อมูลและแนบไฟล์เอกสารให้ครบ (เหมือนหน้าฟอร์มจริง) แล้วกด "ดาวน์โหลดไฟล์ข้อมูล (.json)" ส่งให้ผู้ควบคุมงาน Autoliv เพื่อนำเข้า (Import) เข้าระบบได้ทันที' data-en='Complete all fields and attach required documents, then click "Download Data File (.json)" and send it to your Autoliv Supervisor to import directly.'>กรอกข้อมูลและแนบไฟล์เอกสารให้ครบ (เหมือนหน้าฟอร์มจริง) แล้วกด "ดาวน์โหลดไฟล์ข้อมูล (.json)" ส่งให้ผู้ควบคุมงาน Autoliv เพื่อนำเข้า (Import) เข้าระบบได้ทันที</span>
+    </div>
+
+    <!-- Step 0: Permit Type -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <span class="badge-num">00</span>
+          <span class="card-title" data-th="เลือกประเภทใบอนุญาตทำงาน" data-en="Select Work Permit Type">เลือกประเภทใบอนุญาตทำงาน</span>
+        </div>
+      </div>
+      <div class="type-tabs" id="typeTabs">
+        <button type="button" class="type-tab active" data-type="General">
+          <div style="font-weight:700;color:#0284c7;">General Work</div>
+          <div style="font-size:11px;color:#64748b;" data-th="งานทั่วไป / ซ่อมบำรุง" data-en="General / Maintenance">งานทั่วไป / ซ่อมบำรุง</div>
+        </button>
+        <button type="button" class="type-tab" data-type="HotWork">
+          <div style="font-weight:700;color:#dc2626;">Hot Work</div>
+          <div style="font-size:11px;color:#64748b;" data-th="งานก่อความร้อน / ประกายไฟ" data-en="Welding / Grinding / Sparks">งานก่อความร้อน / ประกายไฟ</div>
+        </button>
+        <button type="button" class="type-tab" data-type="HeightWork">
+          <div style="font-weight:700;color:#d97706;">Working at Height</div>
+          <div style="font-size:11px;color:#64748b;" data-th="งานบนที่สูง ≥ 2 เมตร" data-en="Elevated Work ≥ 2m">งานบนที่สูง ≥ 2 เมตร</div>
+        </button>
+        <button type="button" class="type-tab" data-type="ConfinedSpace">
+          <div style="font-weight:700;color:#7c3aed;">Confined Space</div>
+          <div style="font-size:11px;color:#64748b;" data-th="งานในที่อับอากาศ" data-en="Confined Space Entry">งานในที่อับอากาศ</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Card 01: General Info -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <span class="badge-num">01</span>
+          <span class="card-title" data-th="ข้อมูลทั่วไปและผู้รับเหมา" data-en="General & Contractor Information">ข้อมูลทั่วไปและผู้รับเหมา</span>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label class="field-label"><span data-th="เฟสโรงงาน (Plant Site):" data-en="Plant Site:">เฟสโรงงาน (Plant Site):</span><span class="req">*</span></label>
+          <select id="plantSite">
+            <option value="">-- เลือกเฟส --</option>
+            <option value="ATH">ATH</option>
+            <option value="ATA">ATA</option>
+            <option value="TCB">TCB</option>
+            <option value="TCS">TCS</option>
+            <option value="TCL">TCL</option>
+          </select>
+          <div class="err-msg" id="err_plantSite">กรุณาใส่ข้อมูล</div>
+        </div>
+        <div>
+          <label class="field-label"><span data-th="วันที่ปฏิบัติงาน:" data-en="Work Date:">วันที่ปฏิบัติงาน:</span><span class="req">*</span></label>
+          <input type="date" id="workDate" />
+          <div class="err-msg" id="err_workDate">กรุณาใส่ข้อมูล</div>
+        </div>
+        <div>
+          <label class="field-label"><span data-th="เวลาเริ่มงาน:" data-en="Start Time:">เวลาเริ่มงาน:</span><span class="req">*</span></label>
+          <input type="time" id="workStartTime" value="08:00" />
+        </div>
+        <div>
+          <label class="field-label"><span data-th="เวลาสิ้นสุดงาน:" data-en="End Time:">เวลาสิ้นสุดงาน:</span><span class="req">*</span></label>
+          <input type="time" id="workEndTime" value="17:00" />
+        </div>
+        <div>
+          <label class="field-label"><span data-th="ชื่อบริษัทผู้รับเหมา:" data-en="Contractor Company:">ชื่อบริษัทผู้รับเหมา:</span><span class="req">*</span></label>
+          <input type="text" id="contractorName" placeholder="เช่น บริษัท เอ็นจิเนียริ่ง จำกัด" />
+          <div class="err-msg" id="err_contractorName">กรุณาใส่ข้อมูล</div>
+        </div>
+        <div>
+          <label class="field-label"><span data-th="อีเมลผู้รับเหมา:" data-en="Contractor Email:">อีเมลผู้รับเหมา:</span></label>
+          <input type="email" id="contractorEmail" placeholder="contractor@company.com" />
+        </div>
+        <div>
+          <label class="field-label"><span data-th="หัวหน้างานผู้รับเหมา:" data-en="Contractor Supervisor:">หัวหน้างานผู้รับเหมา:</span><span class="req">*</span></label>
+          <input type="text" id="contractorSupervisor" placeholder="ระบุชื่อ-นามสกุล" />
+          <div class="err-msg" id="err_contractorSupervisor">กรุณาใส่ข้อมูล</div>
+        </div>
+        <div>
+          <label class="field-label"><span data-th="เบอร์โทรติดต่อ:" data-en="Phone Number:">เบอร์โทรติดต่อ:</span><span class="req">*</span></label>
+          <input type="text" id="contractorPhone" placeholder="08X-XXX-XXXX" />
+          <div class="err-msg" id="err_contractorPhone">กรุณาใส่ข้อมูล</div>
+        </div>
+        <div>
+          <label class="field-label"><span data-th="บริเวณ / สถานที่ปฏิบัติงาน:" data-en="Work Area / Location:">บริเวณ / สถานที่ปฏิบัติงาน:</span><span class="req">*</span></label>
+          <input type="text" id="locationDetail" placeholder="เช่น Line A, Warehouse, หลังคา..." />
+          <div class="err-msg" id="err_locationDetail">กรุณาใส่ข้อมูล</div>
+        </div>
+        <div>
+          <label class="field-label"><span data-th="จำนวนผู้ปฏิบัติงาน (คน):" data-en="Worker Count:">จำนวนผู้ปฏิบัติงาน (คน):</span></label>
+          <input type="number" id="workerCount" min="1" max="30" value="1" onchange="renderWorkers()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 02: Scope & Construction Work Types -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <span class="badge-num">02</span>
+          <span class="card-title" data-th="ประเภทงานและรายละเอียดงาน" data-en="Work Type & Job Description">ประเภทงานและรายละเอียดงาน</span>
+        </div>
+      </div>
+      <div id="generalWorkTypesBox" style="margin-bottom:14px;">
+        <label class="field-label" data-th="ประเภทงานก่อสร้างและซ่อมบำรุง:" data-en="Construction & Maintenance Work Type:">ประเภทงานก่อสร้างและซ่อมบำรุง:</label>
+        <div class="grid-2" style="margin-bottom:8px;">
+          <label class="check-card"><input type="checkbox" name="workTypes" value="งานก่อสร้าง/ซ่อมสร้าง" /> <span data-th="งานก่อสร้าง/ซ่อมสร้าง" data-en="Construction / Civil Repair">งานก่อสร้าง/ซ่อมสร้าง</span></label>
+          <label class="check-card"><input type="checkbox" name="workTypes" value="งานทาสี" /> <span data-th="งานทาสี" data-en="Painting">งานทาสี</span></label>
+          <label class="check-card"><input type="checkbox" name="workTypes" value="งานติดตั้ง/ซ่อมบำรุงเครื่องจักร" /> <span data-th="งานติดตั้ง/ซ่อมบำรุงเครื่องจักร" data-en="Machine Installation / Maintenance">งานติดตั้ง/ซ่อมบำรุงเครื่องจักร</span></label>
+          <label class="check-card"><input type="checkbox" name="workTypes" value="อื่นๆ" id="wtOtherChk" /> <span data-th="อื่นๆ" data-en="Other">อื่นๆ</span></label>
+        </div>
+        <input type="text" id="workTypeOther" placeholder="ระบุประเภทงานอื่นๆ..." class="hidden" />
+      </div>
+
+      <div>
+        <label class="field-label"><span data-th="รายละเอียดของงานและขั้นตอน:" data-en="Job Description & Scope:">รายละเอียดของงานและขั้นตอน:</span><span class="req">*</span></label>
+        <textarea id="jobDescription" rows="3" placeholder="ระบุเนื้องาน ขั้นตอน เครื่องมือที่ใช้..."></textarea>
+        <div class="err-msg" id="err_jobDescription">กรุณาใส่ข้อมูล</div>
+      </div>
+    </div>
+
+    <!-- Card 03: Special Risk / Permit-Specific -->
+    <div class="card" id="specialCard">
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <span class="badge-num" style="background:#fee2e2;color:#b91c1c;">03</span>
+          <span class="card-title" data-th="ลักษณะงานความเสี่ยงพิเศษ / ข้อมูลเฉพาะประเภทงาน" data-en="Special High-Risk / Permit-Specific Details">ลักษณะงานความเสี่ยงพิเศษ / ข้อมูลเฉพาะประเภทงาน</span>
+        </div>
+      </div>
+
+      <div id="secGeneral" class="grid-3">
+        <label class="check-card"><input type="checkbox" name="specialRisks" value="การทำงานที่ก่อให้เกิดความร้อนหรือประกายไฟ" onchange="toggleSubSections()" /> Hot Work</label>
+        <label class="check-card"><input type="checkbox" name="specialRisks" value="การทำงานบนที่สูงตั้งแต่ 2 เมตรขึ้นไป" onchange="toggleSubSections()" /> Working at Height (≥ 2m)</label>
+        <label class="check-card"><input type="checkbox" name="specialRisks" value="การทำงานในสถานที่อับอากาศ" onchange="toggleSubSections()" /> Confined Space</label>
+      </div>
+
+      <!-- Hot Work -->
+      <div id="secHotWork" class="hidden" style="margin-top:14px;padding:16px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;">
+        <div style="font-weight:700;color:#991b1b;margin-bottom:10px;">Hot Work Details</div>
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div>
+            <label class="field-label" data-th="ผลกระทบระบบดับเพลิง:" data-en="Fire System Impact:">ผลกระทบระบบดับเพลิง:</label>
+            <select id="hwFireImpact">
+              <option value="No">No (ไม่มีผลกระทบ)</option>
+              <option value="Yes">Yes (มีผลกระทบ)</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" data-th="ชื่อผู้เฝ้าระวังไฟ (Fire Watch Man):" data-en="Fire Watch Man Name:">ชื่อผู้เฝ้าระวังไฟ (Fire Watch Man):</label>
+            <input type="text" id="hwFireWatch" placeholder="ระบุชื่อผู้เฝ้าระวังไฟ" />
+          </div>
+        </div>
+        <label class="field-label" data-th="ประเภทและลักษณะของงานก่อประกายไฟ:" data-en="Type of Hot Work:">ประเภทและลักษณะของงานก่อประกายไฟ:</label>
+        <div class="grid-3" style="margin-bottom:10px;">
+          <label class="check-card"><input type="checkbox" name="hwTypes" value="เชื่อมไฟฟ้า (Electrical Welding)" /> เชื่อมไฟฟ้า (Electrical Welding)</label>
+          <label class="check-card"><input type="checkbox" name="hwTypes" value="งานเจาะ (Drilling)" /> งานเจาะ (Drilling)</label>
+          <label class="check-card"><input type="checkbox" name="hwTypes" value="งานตัด เจียร โลหะ (Metal Cutting)" /> งานตัด เจียร โลหะ (Metal Cutting)</label>
+          <label class="check-card"><input type="checkbox" name="hwTypes" value="เชื่อมอาร์กอน (Argon Welding)" /> เชื่อมอาร์กอน (Argon Welding)</label>
+          <label class="check-card"><input type="checkbox" name="hwTypes" value="เชื่อมก๊าซอื่นๆ (Gas Welding)" /> เชื่อมก๊าซอื่นๆ (Gas Welding)</label>
+          <label class="check-card"><input type="checkbox" name="hwTypes" value="งานอื่นๆ ระบุ" id="hwOtherChk" /> งานอื่นๆ ระบุ</label>
+        </div>
+        <input type="text" id="hwOtherDetail" placeholder="ระบุลักษณะงานก่อประกายไฟอื่นๆ..." class="hidden" style="margin-bottom:12px;" />
+
+        <label class="field-label" data-th="รายการอุปกรณ์และระบบความปลอดภัยที่ต้องใช้ (Hot Work):" data-en="Required Safety Equipment (Hot Work):">รายการอุปกรณ์และระบบความปลอดภัยที่ต้องใช้ (Hot Work):</label>
+        <div class="grid-2" style="margin-bottom:12px;">
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="ถังดับเพลิง ที่จุดปฏิบัติงานไม่เกิน 3 ม." /> ถังดับเพลิง ที่จุดปฏิบัติงานไม่เกิน 3 ม.</label>
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="อุปกรณ์ป้องกันไฟย้อนกลับ (Flashback arrestor)" /> อุปกรณ์ป้องกันไฟย้อนกลับ (Flashback arrestor)</label>
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="ตัดแยกอุปกรณ์ตรวจจับควัน/ความร้อน (Heat detector isolation)" /> ตัดแยกอุปกรณ์ตรวจจับควัน/ความร้อน (Heat detector isolation)</label>
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="ป้ายเตือน (Safety Sign)" /> ป้ายเตือน (Safety Sign)</label>
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="สภาพอุปกรณ์ เครื่องมือไม่ชำรุด (Equipment completed)" /> สภาพอุปกรณ์ เครื่องมือไม่ชำรุด (Equipment completed)</label>
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="การปิดกั้นพื้นที่ (Zoning)" /> การปิดกั้นพื้นที่ (Zoning)</label>
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="ถังก๊าซวางตั้ง มีเชือกรัดมั่นคง (Gas Cylinder with chain)" /> ถังก๊าซวางตั้ง มีเชือกรัดมั่นคง (Gas Cylinder with chain)</label>
+          <label class="check-card"><input type="checkbox" name="hwSafetyEquip" value="ผ้ากันไฟ (Fire Blanket)" /> ผ้ากันไฟ (Fire Blanket)</label>
+        </div>
+
+        <label class="field-label" data-th="อุปกรณ์ป้องกันอันตรายส่วนบุคคลที่ต้องใช้ (Hot Work PPE):" data-en="Required PPE (Hot Work):">อุปกรณ์ป้องกันอันตรายส่วนบุคคลที่ต้องใช้ (Hot Work PPE):</label>
+        <div class="grid-2">
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="กระบังหน้ากรองแสงในการเชื่อมไฟฟ้า (Face shield)" /> กระบังหน้ากรองแสงในการเชื่อมไฟฟ้า (Face shield)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="แว่นตานิรภัย (Goggles)" /> แว่นตานิรภัย (Goggles)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="แว่นตากรองแสงในการเชื่อมแก๊ส (Gas welding goggles)" /> แว่นตากรองแสงในการเชื่อมแก๊ส (Gas welding goggles)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="หน้ากากป้องกันฝุ่น/สารเคมี (Dust/Chemical mask)" /> หน้ากากป้องกันฝุ่น/สารเคมี (Dust/Chemical mask)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="ครอบหูหรือปลั๊กอุดหู (Ear muff or ear plug)" /> ครอบหูหรือปลั๊กอุดหู (Ear muff or ear plug)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="ถุงมือ (Gloves)" /> ถุงมือ (Gloves)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="เข็มขัดหรือเชือกนิรภัย (Safety belt Harness)" /> เข็มขัดหรือเชือกนิรภัย (Safety belt Harness)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="รองเท้านิรภัย (Safety shoes)" /> รองเท้านิรภัย (Safety shoes)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="หมวกนิรภัย (Helmet)" /> หมวกนิรภัย (Helmet)</label>
+          <label class="check-card"><input type="checkbox" name="hwPPE" value="อื่นๆ (Others)" id="hwPpeOtherChk" /> อื่นๆ (Others)</label>
+        </div>
+        <input type="text" id="hwPpeOtherDetail" placeholder="ระบุอุปกรณ์ PPE อื่นๆ เพิ่มเติม..." class="hidden" style="margin-top:10px;" />
+      </div>
+
+      <!-- Working at Height -->
+      <div id="secHeight" class="hidden" style="margin-top:14px;padding:16px;border-radius:10px;background:#fffbeb;border:1px solid #fde68a;">
+        <div style="font-weight:700;color:#92400e;margin-bottom:10px;">Working at Height Details</div>
+        <div class="grid-2" style="margin-bottom:10px;">
+          <div>
+            <label class="field-label" data-th="ระดับความสูงโดยประมาณ:" data-en="Estimated Height:">ระดับความสูงโดยประมาณ:</label>
+            <select id="wahHeight">
+              <option value="2-4 เมตร">2-4 เมตร</option>
+              <option value="4-6 เมตร">4-6 เมตร</option>
+              <option value="มากกว่า 6 เมตร">มากกว่า 6 เมตร</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" data-th="ผู้ควบคุมงานบนที่สูง:" data-en="Height Work Supervisor:">ผู้ควบคุมงานบนที่สูง:</label>
+            <input type="text" id="wahSupervisor" placeholder="ระบุชื่อผู้ควบคุมงานบนที่สูง" />
+          </div>
+        </div>
+        <label class="field-label" data-th="ประเภทและลักษณะของงานขึ้นที่สูง:" data-en="Type of Working at Height:">ประเภทและลักษณะของงานขึ้นที่สูง:</label>
+        <div class="grid-3" style="margin-bottom:10px;">
+          <label class="check-card"><input type="checkbox" name="wahAccess" value="บันได" /> บันได</label>
+          <label class="check-card"><input type="checkbox" name="wahAccess" value="รถกระเช้า" /> รถกระเช้า (Boom / Scissor Lift)</label>
+          <label class="check-card"><input type="checkbox" name="wahAccess" value="Platform" /> Platform</label>
+          <label class="check-card"><input type="checkbox" name="wahAccess" value="นั่งร้าน" /> นั่งร้าน</label>
+          <label class="check-card"><input type="checkbox" name="wahAccess" value="งานบนหลังคา" /> งานบนหลังคา</label>
+          <label class="check-card"><input type="checkbox" name="wahAccess" value="งานอื่นๆ ระบุ" id="wahOtherChk" /> งานอื่นๆ ระบุ</label>
+        </div>
+        <input type="text" id="wahOtherDetail" placeholder="ระบุลักษณะงานขึ้นที่สูงอื่นๆ..." class="hidden" style="margin-bottom:12px;" />
+
+        <label class="field-label" data-th="รายการอุปกรณ์และระบบความปลอดภัยที่ต้องใช้ (Working at Height):" data-en="Required Safety Equipment (Working at Height):">รายการอุปกรณ์และระบบความปลอดภัยที่ต้องใช้ (Working at Height):</label>
+        <div class="grid-2" style="margin-bottom:12px;">
+          <label class="check-card"><input type="checkbox" name="wahSafetyEquip" value="การปิดกั้นพื้นที่หรือล้อมอาณาเขต (Zoning)" /> การปิดกั้นพื้นที่หรือล้อมอาณาเขต (Zoning)</label>
+          <label class="check-card"><input type="checkbox" name="wahSafetyEquip" value="ป้ายเตือน (Safety Sign)" /> ป้ายเตือน (Safety Sign)</label>
+        </div>
+
+        <label class="field-label" data-th="อุปกรณ์ป้องกันอันตรายส่วนบุคคลที่ต้องใช้ (Working at Height PPE):" data-en="Required PPE (Working at Height):">อุปกรณ์ป้องกันอันตรายส่วนบุคคลที่ต้องใช้ (Working at Height PPE):</label>
+        <div class="grid-2">
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="เข็มขัดนิรภัยชนิดเต็มตัว (Full Body Harness)" /> เข็มขัดนิรภัยชนิดเต็มตัว (Full Body Harness)</label>
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="รองเท้านิรภัย (Safety shoes)" /> รองเท้านิรภัย (Safety shoes)</label>
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="หมวกนิรภัย (Helmet)" /> หมวกนิรภัย (Helmet)</label>
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="ถุงมือ (Gloves)" /> ถุงมือ (Gloves)</label>
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="แว่นตานิรภัย (Safety Glasses)" /> แว่นตานิรภัย (Safety Glasses)</label>
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="หน้ากากป้องกันฝุ่น/เคมี (Dust/ Chemical mask)" /> หน้ากากป้องกันฝุ่น/เคมี (Dust/ Chemical mask)</label>
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="ครอบหู/ปลั๊กอุดหู (Ears muff or ear plug)" /> ครอบหู/ปลั๊กอุดหู (Ears muff or ear plug)</label>
+          <label class="check-card"><input type="checkbox" name="wahPPE" value="อื่นๆ (Others)" id="wahPpeOtherChk" /> อื่นๆ (Others)</label>
+        </div>
+        <input type="text" id="wahPpeOtherDetail" placeholder="ระบุอุปกรณ์ PPE อื่นๆ เพิ่มเติม..." class="hidden" style="margin-top:10px;" />
+      </div>
+
+      <!-- Confined Space -->
+      <div id="secConfined" class="hidden" style="margin-top:14px;padding:16px;border-radius:10px;background:#f5f3ff;border:1px solid #ddd6fe;">
+        <div style="font-weight:700;color:#5b21b6;margin-bottom:10px;">Confined Space Details</div>
+        <div class="grid-2">
+          <div>
+            <label class="field-label" data-th="ผู้ควบคุมงาน:" data-en="Controller Name:">ผู้ควบคุมงาน:</label>
+            <input type="text" id="csController" />
+          </div>
+          <div>
+            <label class="field-label" data-th="ผู้ช่วยเหลือ:" data-en="Standby Rescue Name:">ผู้ช่วยเหลือ:</label>
+            <input type="text" id="csRescue" />
+          </div>
+          <div>
+            <label class="field-label" data-th="ผู้อนุญาต:" data-en="Authorizer Name:">ผู้อนุญาต:</label>
+            <input type="text" id="csAuthorizer" />
+          </div>
+          <div>
+            <label class="field-label" data-th="ช่องทางการสื่อสาร:" data-en="Communication Channel:">ช่องทางการสื่อสาร:</label>
+            <input type="text" id="csComm" placeholder="เช่น วิทยุสื่อสาร ช่อง 1 / ตะโกนเรียก" />
+          </div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #c4b5fd;">
+          <label class="field-label" style="color:#5b21b6;" data-th="เอกสารประกอบงานในที่อับอากาศ (แนบไฟล์):" data-en="Confined Space Supporting Documents:">เอกสารประกอบงานในที่อับอากาศ (แนบไฟล์):</label>
+          <div class="attach-grid" id="confinedAttachGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 04: Workers & 6 Attachments -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <span class="badge-num">04</span>
+          <span class="card-title" data-th="รายชื่อผู้ปฏิบัติงานและเอกสารแนบ" data-en="Worker List & Required Attachments">รายชื่อผู้ปฏิบัติงานและเอกสารแนบ</span>
+        </div>
+        <span style="font-size:11px;color:#64748b;" id="totalSizeInfo">ขนาดไฟล์แนบรวม: 0.00 / 15.00 MB</span>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label class="field-label" data-th="รายชื่อผู้เข้าปฏิบัติงาน:" data-en="Worker Names:">รายชื่อผู้เข้าปฏิบัติงาน:</label>
+        <div id="workersGrid" class="grid-2"></div>
+      </div>
+
+      <div id="generalAttachSection">
+        <label class="field-label" data-th="เอกสารประกอบการขออนุญาต (6 รายการ — นำเข้าไปเป็นไฟล์แนบจริงได้ทันที):" data-en="Supporting Documents (6 Slots — imported directly as attachments):">เอกสารประกอบการขออนุญาต (6 รายการ — นำเข้าไปเป็นไฟล์แนบจริงได้ทันที):</label>
+        <div class="attach-grid" id="generalAttachGrid"></div>
+      </div>
+    </div>
+
+    <!-- Card 05: PPE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title-wrap">
+          <span class="badge-num">05</span>
+          <span class="card-title" data-th="อุปกรณ์ป้องกันอันตรายส่วนบุคคลที่ต้องสวมใส่ (PPE)" data-en="Required Personal Protective Equipment (PPE)">อุปกรณ์ป้องกันอันตรายส่วนบุคคลที่ต้องสวมใส่ (PPE)</span>
+        </div>
+      </div>
+      <div class="grid-3">
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="รองเท้านิรภัย" /> รองเท้านิรภัย</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="กระบังหน้า" /> กระบังหน้า</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="ที่อุดหู / ที่ครอบหู" /> ที่อุดหู / ที่ครอบหู</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="เข็มขัดนิรภัย" /> เข็มขัดนิรภัย</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="หน้ากากเชื่อม / แว่นตานิรภัย" /> หน้ากากเชื่อม / แว่นตานิรภัย</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="หมวกนิรภัย" /> หมวกนิรภัย</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="เอี๊ยม" /> เอี๊ยม</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="ผ้ากันไฟ" /> ผ้ากันไฟ</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="หน้ากากกรองฝุ่น / ผ้าปิดจมูก" /> หน้ากากกรองฝุ่น / ผ้าปิดจมูก</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="ถุงมือ" /> ถุงมือ</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="หน้ากากป้องกันสารเคมี" /> หน้ากากป้องกันสารเคมี</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="เสื้อสะท้อนแสง" checked /> เสื้อสะท้อนแสง</label>
+        <label class="check-card"><input type="checkbox" name="ppeItems" value="อื่นๆ" id="ppeOtherChk" /> อื่นๆ</label>
+      </div>
+      <input type="text" id="ppeOther" placeholder="ระบุ PPE อื่นๆ..." class="hidden" style="margin-top:10px;" />
+    </div>
+
+    <div class="footer-bar">
+      <button type="button" class="btn-secondary" onclick="resetForm()" data-th="ล้างฟอร์ม" data-en="Reset Form">ล้างฟอร์ม</button>
+      <button type="button" class="btn-primary" onclick="exportJson()">📥 <span data-th="ดาวน์โหลดไฟล์ข้อมูล (.json) ส่งให้ Autoliv" data-en="Download Data File (.json) for Autoliv">ดาวน์โหลดไฟล์ข้อมูล (.json) ส่งให้ Autoliv</span></button>
+    </div>
+  </div>
+
+  <script>
+    let currentType = 'General';
+    let currentLang = 'th';
+    const MAX_TOTAL_BYTES = 15 * 1024 * 1024;
+    const attachmentStore = {};
+
+    const GENERAL_SLOTS = [
+      { key: 'jsaFiles', title: 'Job safety analysis form (JSA)', required: true },
+      { key: 'regulationFiles', title: 'Contractor General Regulation', required: false },
+      { key: 'preWorkPlanFiles', title: 'Pre-work plan checklist', required: false },
+      { key: 'safetyTalkFiles', title: 'Daily 5 minutes safety talk', required: false },
+      { key: 'propertyFiles', title: 'แบบบันทึกการนำทรัพย์สินเข้า-ออก ภายในบริษัทฯของผู้รับเหมา', required: true },
+      { key: 'workerListFiles', title: 'แนบไฟล์รายชื่อผู้เข้าปฏิบัติงาน', required: false }
+    ];
+
+    const CONFINED_SLOTS = [
+      { key: 'controller', title: 'ใบเซอร์ผู้ควบคุมงาน', required: false },
+      { key: 'rescue', title: 'ใบเซอร์ผู้ช่วยเหลือ', required: false },
+      { key: 'authorizer', title: 'ใบเซอร์ผู้อนุญาต', required: false }
+    ];
+
+    document.getElementById('workDate').value = new Date().toISOString().split('T')[0];
+
+    document.getElementById('wtOtherChk').addEventListener('change', function () {
+      document.getElementById('workTypeOther').classList.toggle('hidden', !this.checked);
+    });
+    document.getElementById('ppeOtherChk').addEventListener('change', function () {
+      document.getElementById('ppeOther').classList.toggle('hidden', !this.checked);
+    });
+    document.getElementById('hwOtherChk').addEventListener('change', function () {
+      document.getElementById('hwOtherDetail').classList.toggle('hidden', !this.checked);
+    });
+    document.getElementById('hwPpeOtherChk').addEventListener('change', function () {
+      document.getElementById('hwPpeOtherDetail').classList.toggle('hidden', !this.checked);
+    });
+    document.getElementById('wahOtherChk').addEventListener('change', function () {
+      document.getElementById('wahOtherDetail').classList.toggle('hidden', !this.checked);
+    });
+    document.getElementById('wahPpeOtherChk').addEventListener('change', function () {
+      document.getElementById('wahPpeOtherDetail').classList.toggle('hidden', !this.checked);
+    });
+
+    document.querySelectorAll('#typeTabs .type-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#typeTabs .type-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentType = btn.getAttribute('data-type');
+        updateTypeVisibility();
+      });
+    });
+
+    function updateTypeVisibility() {
+      const isGen = currentType === 'General';
+      document.getElementById('generalWorkTypesBox').classList.toggle('hidden', !isGen);
+      document.getElementById('secGeneral').classList.toggle('hidden', !isGen);
+      document.getElementById('generalAttachSection').classList.toggle('hidden', !isGen);
+      toggleSubSections();
+    }
+
+    function toggleSubSections() {
+      const checkedRisks = getCheckedValues('specialRisks');
+      const showHot = currentType === 'HotWork' || (currentType === 'General' && checkedRisks.includes('การทำงานที่ก่อให้เกิดความร้อนหรือประกายไฟ'));
+      const showHeight = currentType === 'HeightWork' || (currentType === 'General' && checkedRisks.includes('การทำงานบนที่สูงตั้งแต่ 2 เมตรขึ้นไป'));
+      const showConfined = currentType === 'ConfinedSpace' || (currentType === 'General' && checkedRisks.includes('การทำงานในสถานที่อับอากาศ'));
+
+      document.getElementById('secHotWork').classList.toggle('hidden', !showHot);
+      document.getElementById('secHeight').classList.toggle('hidden', !showHeight);
+      document.getElementById('secConfined').classList.toggle('hidden', !showConfined);
+    }
+
+    function renderAttachmentGrid(containerId, slots) {
+      const grid = document.getElementById(containerId);
+      grid.innerHTML = '';
+      slots.forEach(slot => {
+        if (!attachmentStore[slot.key]) attachmentStore[slot.key] = [];
+        const box = document.createElement('div');
+        box.className = 'attach-box';
+        box.id = 'box_' + slot.key;
+
+        const top = document.createElement('div');
+        top.className = 'attach-top';
+
+        const title = document.createElement('div');
+        title.style.fontSize = '12px';
+        title.style.fontWeight = '700';
+        title.innerHTML = slot.title + (slot.required ? '<span class="req">*</span>' : '');
+
+        const lbl = document.createElement('label');
+        lbl.className = 'attach-btn';
+        lbl.innerHTML = '<span>+ แนบไฟล์</span>';
+        const inp = document.createElement('input');
+        inp.type = 'file';
+        inp.multiple = true;
+        inp.style.display = 'none';
+        inp.addEventListener('change', async (e) => {
+          const files = Array.from(e.target.files || []);
+          e.target.value = '';
+          await handleFilesAdded(slot.key, files);
+          renderAttachmentGrid(containerId, slots);
+        });
+        lbl.appendChild(inp);
+
+        top.appendChild(title);
+        top.appendChild(lbl);
+        box.appendChild(top);
+
+        const list = document.createElement('div');
+        list.className = 'file-list';
+        attachmentStore[slot.key].forEach((f, idx) => {
+          const chip = document.createElement('div');
+          chip.className = 'file-chip';
+          chip.innerHTML = `<span>${f.fileName}</span>`;
+          const rm = document.createElement('button');
+          rm.type = 'button';
+          rm.textContent = '✕';
+          rm.onclick = () => {
+            attachmentStore[slot.key].splice(idx, 1);
+            updateTotalSizeInfo();
+            renderAttachmentGrid(containerId, slots);
+          };
+          chip.appendChild(rm);
+          list.appendChild(chip);
+        });
+        box.appendChild(list);
+        grid.appendChild(box);
+      });
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function getTotalBytes() {
+      let total = 0;
+      Object.keys(attachmentStore).forEach(k => {
+        (attachmentStore[k] || []).forEach(f => { total += (f.size || 0); });
+      });
+      return total;
+    }
+
+    function updateTotalSizeInfo() {
+      const mb = (getTotalBytes() / (1024 * 1024)).toFixed(2);
+      document.getElementById('totalSizeInfo').textContent = `ขนาดไฟล์แนบรวม: ${mb} / 15.00 MB`;
+    }
+
+    async function handleFilesAdded(slotKey, files) {
+      for (const f of files) {
+        if (getTotalBytes() + f.size > MAX_TOTAL_BYTES) {
+          alert('ขนาดไฟล์แนบรวมเกิน 15 MB กรุณาลดขนาดไฟล์หรือย่อรูปก่อนแนบครับ');
+          break;
+        }
+        const dataUrl = await readFileAsDataUrl(f);
+        attachmentStore[slotKey].push({
+          fileName: f.name,
+          mimeType: f.type || 'application/octet-stream',
+          size: f.size,
+          dataUrl
+        });
+      }
+      updateTotalSizeInfo();
+    }
+
+    function renderWorkers() {
+      const count = Math.max(1, Math.min(30, parseInt(document.getElementById('workerCount').value || '1', 10)));
+      const grid = document.getElementById('workersGrid');
+      const existing = Array.from(grid.querySelectorAll('input')).map(i => i.value);
+      grid.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.placeholder = (currentLang === 'th' ? 'ชื่อผู้ปฏิบัติงานคนที่ ' : 'Worker ') + (i + 1);
+        inp.value = existing[i] || '';
+        grid.appendChild(inp);
+      }
+    }
+
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(el => el.value);
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'th' ? 'en' : 'th';
+      document.querySelectorAll('[data-th]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + currentLang);
+      });
+      renderWorkers();
+    }
+
+    function validateRequired() {
+      const requiredIds = ['plantSite', 'workDate', 'contractorName', 'contractorSupervisor', 'contractorPhone', 'locationDetail', 'jobDescription'];
+      let valid = true;
+      requiredIds.forEach(id => {
+        const el = document.getElementById(id);
+        const err = document.getElementById('err_' + id);
+        const empty = !String(el.value || '').trim();
+        el.classList.toggle('err-input', empty);
+        if (err) err.style.display = empty ? 'block' : 'none';
+        if (empty) valid = false;
+      });
+      return valid;
+    }
+
+    function exportJson() {
+      if (!validateRequired()) {
+        alert(currentLang === 'th' ? 'กรุณากรอกข้อมูลในช่องที่มีเครื่องหมาย * ให้ครบถ้วน' : 'Please fill in all required (*) fields.');
+        return;
+      }
+
+      const workers = Array.from(document.querySelectorAll('#workersGrid input')).map(i => i.value.trim()).filter(Boolean);
+      const checkedRisks = getCheckedValues('specialRisks');
+      const attachmentsOut = {};
+      Object.keys(attachmentStore).forEach(k => {
+        if (attachmentStore[k] && attachmentStore[k].length > 0) {
+          attachmentsOut[k] = attachmentStore[k].map(f => ({
+            fileName: f.fileName,
+            mimeType: f.mimeType,
+            dataUrl: f.dataUrl
+          }));
+        }
+      });
+
+      const payload = {
+        schemaVersion: 1,
+        exportedAt: new Date().toISOString(),
+        permitCategory: currentType,
+        plantSite: document.getElementById('plantSite').value,
+        workDate: document.getElementById('workDate').value,
+        workStartTime: document.getElementById('workStartTime').value,
+        workEndTime: document.getElementById('workEndTime').value,
+        contractorName: document.getElementById('contractorName').value.trim(),
+        contractorEmail: document.getElementById('contractorEmail').value.trim(),
+        contractorSupervisor: document.getElementById('contractorSupervisor').value.trim(),
+        contractorPhone: document.getElementById('contractorPhone').value.trim(),
+        workerCount: parseInt(document.getElementById('workerCount').value || '1', 10),
+        locationDetail: document.getElementById('locationDetail').value.trim(),
+        jobDescription: document.getElementById('jobDescription').value.trim(),
+        workers: workers.length > 0 ? workers : [''],
+        workTypes: getCheckedValues('workTypes'),
+        workTypeOther: document.getElementById('workTypeOther').value.trim(),
+        specialRisks: checkedRisks,
+        ppeItems: getCheckedValues('ppeItems'),
+        ppeOther: document.getElementById('ppeOther').value.trim(),
+        attachments: attachmentsOut
+      };
+
+      if (!document.getElementById('secHotWork').classList.contains('hidden')) {
+        payload.hotWorkData = {
+          fireSystemImpact: document.getElementById('hwFireImpact').value,
+          hotWorkTypes: getCheckedValues('hwTypes'),
+          otherHotWorkDetail: document.getElementById('hwOtherDetail').value.trim(),
+          requiredSafetyEquip: getCheckedValues('hwSafetyEquip'),
+          requiredPPE: getCheckedValues('hwPPE'),
+          otherPPEDetail: document.getElementById('hwPpeOtherDetail').value.trim(),
+          fireWatchManName: document.getElementById('hwFireWatch').value.trim()
+        };
+      }
+      if (!document.getElementById('secHeight').classList.contains('hidden')) {
+        payload.heightWorkData = {
+          estimatedHeight: document.getElementById('wahHeight').value,
+          supervisorName: document.getElementById('wahSupervisor').value.trim(),
+          accessEquipment: getCheckedValues('wahAccess'),
+          otherHighLevelDetail: document.getElementById('wahOtherDetail').value.trim(),
+          requiredSafetyEquip: getCheckedValues('wahSafetyEquip'),
+          fallProtectionPPE: getCheckedValues('wahPPE'),
+          otherPPEDetail: document.getElementById('wahPpeOtherDetail').value.trim()
+        };
+      }
+      if (!document.getElementById('secConfined').classList.contains('hidden')) {
+        payload.confinedData = {
+          controllerName: document.getElementById('csController').value.trim(),
+          standbyRescueName: document.getElementById('csRescue').value.trim(),
+          authorizerName: document.getElementById('csAuthorizer').value.trim(),
+          communicationChannel: document.getElementById('csComm').value.trim()
+        };
+      }
+
+      const safeCompany = (payload.contractorName || 'Supplier').replace(/[^a-zA-Z0-9ก-๙_-]/g, '_').slice(0, 30);
+      const fileName = `WorkPermit_Supplier_${safeCompany}_${payload.workDate}.json`;
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function resetForm() {
+      if (!confirm(currentLang === 'th' ? 'ล้างข้อมูลทั้งหมดในฟอร์มใช่หรือไม่?' : 'Reset all form fields?')) return;
+      location.reload();
+    }
+
+    renderWorkers();
+    renderAttachmentGrid('generalAttachGrid', GENERAL_SLOTS);
+    renderAttachmentGrid('confinedAttachGrid', CONFINED_SLOTS);
+    updateTypeVisibility();
+  </script>
+</body>
+</html>
